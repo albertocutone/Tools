@@ -1,0 +1,27 @@
+Actor = game object
+Built up from a set of components
+
+Any actor or component can be extended by creating a Blueprint
+Unreal lets you script custom login usng event graphs
+
+Architecure
+Game world = virtual environment the player occupies.
+The game world contains game objects -> entities that exists in that world
+Game object are made of components, which are the individual building blocks that add different pieces
+or functionality to a game object. Composition pattern is used to let you build up game objects out of components.
+
+Inheritance hierarchy for components in Unreal
+UObject
+->AActor = game objects that exists in the world
+->UActorComponent: base component type. Components are individual pieces of functionality that can be registered 
+  to an actor
+ -> UMovementComponent: adds functionality to actor
+ -> USceneComponent: specialized class of components that have a spatial representation in the GW
+   -> UAudioComponent
+   -> UCameraComponent
+   -> UPrimitiveComponent: represent all the scene components that can be rendered in the viewport and 
+      collide against
+     -> UMeshComponent
+       -> UStaticMeshComponent
+       -> USkinnedMeshComponent
+     -> UShapeComponent

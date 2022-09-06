@@ -1,0 +1,76 @@
+Compilation process
+Process to convert source code into low-level machine code for a specific processor architecture
+
+1. Preprocessing
+    - macros are expaneded
+    - cmd: cpp source.c (or gcc -E source.c)
+    - input: source.cpp|c|h
+    - output: source.i
+2. Compiling
+    - source code to assembly - human.readable processor instructions
+    - cmd: gcc -S source.i
+    - input: source.i
+    - output: source.s (contains arch. specific assebly code)
+3. Assembling
+    - assebmly code to object file with machine code
+    - cmd: as source.s -o source.o
+    - input: source.s
+    - output: sorce.o (contains arch. specific machine code)
+4. Linking
+    - links object code together into single object file
+    - links symbols from other object and external libraries
+    - symbol -> reference to a component (function,globel variable) in an object.
+                Usually resolves into an address where that component is located in memory
+    - cmd: ld
+    - input: source.o
+    - output: source.o
+    - Dynamic linking: symbols are linked in by dynamic linker (=loader,interpreter) at runtime.
+                       Binding: process of resolving the address of external symbols. Can be:
+                       - immediate binding
+                       - lazy binding: uses Procedure Linkage Table (PLT)
+                       dynamic lib naming:
+                       lib + library_nams + .so + .majorVersion + .minor + .release (eg. libc-so.6.0.2)
+                       Version and extension .so can be inverted (e.g libc-2.31-so)
+                       Soname labels for a major version, it is symbolic link to real name. So updating without changing major version won't break the link (e.g. soname: libjpeg.so.8 => libjpeg.so.8.2.2)
+                       Dynamic libraries: should be compiled as position-independent -fpic, so that a global offset table can address all functions in the library at runtime
+                       Compile a shared library:
+                       1. gcc -fpic -c source1.c .. sourceN.c
+                       2. gcc -fpic source1.o .. sourceN.o -shared -Wl,-soname,libsource.so.1 -o libsource.so.1.1
+                       3. link to soname: ln -s libsource.so.1.1 libsource.so.1
+                       See dependencies:
+                       $ readelf -a executable | grep Shared
+                       You may have to change environment variables and add (or better prepend) the path of your shared lib ($LD_LIBRARY_PATH- remember to EXPORT for testing), because the loader need to know where to find it. You can also, especially in production, put the lib in the default path: /lib/x86_64-linux-gnu/
+                       If you make no back-compatible changes, you need to update the major version
+    - Static linking: symbols from external libraries are compiled into the final object.
+      - Use static libraries when code are reliable and you do not need to change it often
+      - $ gcc source.o -static -o filename  -> output: filename.a
+      Create a static library:
+      - Compile to object files: gcc -c source1.c .. sourceN.o
+      Link into a static library:
+      - ar cr libtest.a source1.o .. sourceN.o -> create a .h include file to define prototypes for library functions
+      - ar t libtest.a -> shows object files contained in the static library
+
+Object files:
+1. Relocatable: non-executable file that neesd to be linked into another file
+2. Executable
+3. Shared object
+
+On Linux, obj files are in the form of ELF: Executable and Linkable Format. As default, executable they are PIE (Position Independent Executable)
+
+Gcc: Unix compiler. Invokes all stages of compilation
+cmd: gcc source.c -o binaryName
+arguments:
+- -I: non standard directories to search for include (.h) files
+- -L: non standard directories to search for library files (.a .so)
+- -l: specific library to link (to put after source/object files to be compiled):
+  - -lc -> libc
+  - -lm -> libm
+  - -lpthread -> libpthread
+- -c: stop after assembly phase (do not link). ELF file will be targeted as relocatable
+- -save-temps: keeps intermediate files (.i,.s,.o)
+
+Binary file analysis:
+$ file filename
+$ readelf -a filename | grep something
+$ objdump -D filename > filename.dump
+When a binary file is executed and loaded into memory, it becomes a PROCESS

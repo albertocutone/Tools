@@ -1,0 +1,54 @@
+c++ standard main features
+
+c++ 98, c++ 03:
+- deterministic object lifetime (or RAII Resource Acquisition Is Initialization): 
+  We can rely in the order of costruction/destruction based on the scope
+- Templates: do not generate overhead, the compiler take care of all
+  
+c++ 11:
+- auto keyword : infer data type
+- range-for loops:
+  for(const auto &element : range ) ...
+- lambdas: [capture](parameters list){ body }
+- variadic templates: template<typename ... T>
+- unique_ptr: replace auto_ptr.
+  std::unique_ptr<int> ptr(new int(5));
+- constexpr: 
+  A constexpr function can call only constexpr function (e.g constexpr int get_value{..})
+  Can have only one return statement
+  constexpr auto value = get_value() -> value is available in the compile context.
+- move semantic:
+
+c++ 14:
+- basically a release for bug fix of c++11 
+- auto return type deduction: auto function(...)
+- generic lambdas: [](const auto i){ .. }
+- generalized lambda capture expression: 
+  [value = [](){ return 3; }](const auto i){ return i < value }
+  can have a lambda inside a capture expression of another lambda
+- make_unique: 
+  auto ptr{std::make_unique<int>(5)}; //return an unique_ptr
+  I should not see anymore any new or delete keywork at all
+- constexpr is more flexible:
+  Allows loops, branches, more return statements
+  Cannot call non constexpr functions
+  used to import performance, cause things are computed at compile time
+
+
+c++ 17: 
+- guaranteed copy/move elision
+- constexpr in Stdlib
+- constexpr lambdas
+- std::string_view: does not create the string, but pass only a view
+- class template argument deduction
+- fold expressions
+- structured bindings
+  std::pair<int,int> values{1,2};
+  auto [first,second] = values;
+- if-init expressions: I can define in if () some conditions which are visible for the entire scope of the if block
+
+c++ 20:
+- 
+
+c++ 23:
+- 

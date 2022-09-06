@@ -1,0 +1,32 @@
+ACID:
+ Atomicity
+ Consistency
+ Isolation
+ Durability
+
+Caching:
+- Store what does not change frequently
+- Redis
+
+Text search engine (with fuzzy search):
+- EleasticSearch, Solr
+Database:
+- Blob storage (video, images..) -> AmazonS3 + CDN (content delivery network, ditributes the same data geographically in a lot of locations)
+- Time Series Database (TSD): 
+	- InfluxDB, OpenTSDB.
+	- Updated in append-only format
+- Data Warehouse Storage Solution:
+	- Storage for analytics, needs queries capabilities to serve a lot of reports: 
+	- Hadoop
+
+            Structured Data
+			/             \
+		ACID                 NO 
+		   |               /      \
+		   |              /        \
+		  /		         /          \
+	   RDBMS     (Document DB)   Ever increasing data + finite (easy) queries:
+	  MySQL,     Couchbase        - (COLUMNAR DB): Casandra, HBase 
+	  Oracle,    MongoDB          - it scales only if queries are made on the parti
+	  SQL,                        - eventually duplicate it and change partition key 
+	  PostGres

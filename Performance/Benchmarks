@@ -1,0 +1,22 @@
+BENCHMARK
+
+Code performance are very important. Optimize code can lead to:
+- faster execution
+- energy saving
+
+There are several modes to benchmark c++ code:
+- Set Timer in the code (be careful to Debug - Release optimization)
+- Use external tools
+  - perf (performance events counter)
+  - compiler Explorer (https://godbolt.org/)
+- use external library
+  - Google Benchmark
+
+
+Measure first, tune what matters! You need all information to make the right decision.
+Go deep in assembly code
+
+Google Benchmark library:
+- used for micro BM (really isolated part of the system)
+- processes multile input using range_x data type
+- need for isolating things to BM
